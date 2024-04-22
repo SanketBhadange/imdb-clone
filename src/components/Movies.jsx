@@ -1,11 +1,14 @@
 import React, { useEffect,useState } from 'react'
 import axios from 'axios'
 import Pagination from './Pagination'
+import Watchlist from './Watchlist';
+
 
 const Movies = () => {
 
     const [moviesData, setMoviesData] = useState([])
     const [pageNumber, setPageNumber] = useState(1)
+    const [watchlist, setWatchlist] = useState([])
 
     const getTrendingMoviesData = () => {
         axios
@@ -28,7 +31,42 @@ const Movies = () => {
         }
       }
 
-      const getMovieCard =movie=>{
+      const addToWatchlist =(movie)=>{
+          let updatedWatchlist =[...watchlist,movie]
+          setWatchlist(updatedWatchlist)
+          console.log(Watchlist)
+       
+      }
+          
+      const removeFromWatchlist = (movie) => {
+        let updatedWatchList = watchlist.filter(watchlistMovie => {
+          return watchlistMovie.id !== movie.id
+        })
+        setWatchlist(updatedWatchList)
+    }
+
+    const showAddIcon = (movie) => {
+        return <button onClick={() => addToWatchlist(movie)}>
+                  +
+                  
+                </button>
+      }
+
+      const showRemoveIcon = (movie) => {
+        return <button onClick={() => removeFromWatchlist(movie)}>
+                  X
+                </button>
+      }
+    
+      
+
+      const isAddedToWatchlist = (movieId) => {
+        return watchlist.includes(movieId)
+          
+        }
+      
+        
+    const getMovieCard =movie=>{
 
         return       <div key={movie.id}
                                 className='w-[160px] h-[30vh] bg-center bg-cover m-4 md:h-[40vh] md:w-[180px] relative rounded-xl hover:scale-110 duration-300 flex items-end'
@@ -37,15 +75,24 @@ const Movies = () => {
                             }}
             
                     >
+                           <div className='text-2xl p-2 bg-gray-200 rounded-xl absolute top-2 right-2'>
+                             
+                           <>
+                                {
+                                isAddedToWatchlist(movie) ? showRemoveIcon(movie) : showAddIcon(movie)
+                                }
+                           </>
+                            
 
-                                    <div className='text-white font-bold text-center w-full bg-gray-900 bg-opacity-60'>
-                                                    {movie.original_title}
-                                    </div>
-
-
+                           </div>
+                            <div className='text-white font-bold text-center w-full bg-gray-900 bg-opacity-60'>
+                                            {movie.original_title}
+                            </div>
 
                     </div>
-    }
+        }
+
+
 
     return (
       <div>
@@ -67,6 +114,12 @@ const Movies = () => {
   
     )
   }
+
+
+
+
+
+
   
   export default Movies
   
