@@ -9,6 +9,7 @@ const Movies = () => {
     const [moviesData, setMoviesData] = useState([])
     const [pageNumber, setPageNumber] = useState(1)
     const [watchlist, setWatchlist] = useState([])
+    const [hovered, setHovered] = useState('')
 
     const getTrendingMoviesData = () => {
         axios
@@ -65,6 +66,12 @@ const Movies = () => {
           
         }
       
+        const showButton = (movieId) => {
+            setHovered(movieId)
+          }
+          const removeButton = () => {
+            setHovered('')
+          }
         
     const getMovieCard =movie=>{
 
@@ -73,15 +80,20 @@ const Movies = () => {
                             style={{
                             backgroundImage: `url(https://image.tmdb.org/t/p/original/t/p/w500/${movie.poster_path})`
                             }}
+                            onMouseOver={() => showButton(movie.id)}
+                            onMouseLeave={removeButton}
             
-                    >
-                           <div className='text-2xl p-2 bg-gray-200 rounded-xl absolute top-2 right-2'>
-                             
-                           <>
+                        >
+
+                           <div className='text-2xl p-2 bg-gray-200 rounded-xl absolute top-2 right-2'
+                             style={{
+                                display: hovered === movie.id ? 'block' : 'none'
+                                }}>
+                           
                                 {
                                 isAddedToWatchlist(movie) ? showRemoveIcon(movie) : showAddIcon(movie)
                                 }
-                           </>
+                           
                             
 
                            </div>
