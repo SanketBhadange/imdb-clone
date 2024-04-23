@@ -35,33 +35,35 @@ const Movies = () => {
         setPageNumber(pageNumber-1)
       }
     }
-    const addToWatchlist = (movieId) => {
-      let updatedWatchList = [...watchlist, movieId]
+    const addToWatchlist = (movie) => {
+      let updatedWatchList = [...watchlist, movie]
       setWatchlist(updatedWatchList)
       localStorage.setItem('imdb', JSON.stringify(updatedWatchList))
       console.log('add',watchlist)
     }
-    const removeFromWatchlist = (movieId) => {
-      let updatedWatchList = watchlist.filter(watchlistId => {
-        return watchlistId !== movieId
+    const removeFromWatchlist = (movie) => {
+      let updatedWatchList = watchlist.filter(watchlistMovie => {
+        return watchlistMovie.id !== movie.id
       })
       setWatchlist(updatedWatchList)
       localStorage.setItem('imdb', JSON.stringify(updatedWatchList))
       console.log('remove',watchlist)
     }
-    const showAddIcon = (movieId) => {
-      return <div onClick={() => addToWatchlist(movieId)}>
+    const showAddIcon = (movie) => {
+      return <div onClick={() => addToWatchlist(movie)}>
                 +
               </div>
     }
-    const showRemoveIcon = (movieId) => {
-      return <div onClick={() => removeFromWatchlist(movieId)}>
+    const showRemoveIcon = (movie) => {
+      return <div onClick={() => removeFromWatchlist(movie)}>
                 X
               </div>
     }
     const isAddedToWatchlist = (movieId) => {
-      return watchlist.includes(movieId)
-    }
+        return watchlist.some(movie => {
+          return movie.id === movieId
+        })
+      }
   
     const showButton = (movieId) => {
       setHovered(movieId)
@@ -86,7 +88,7 @@ const Movies = () => {
                   }}
                 >
                   {
-                    isAddedToWatchlist(movie.id) ? showRemoveIcon(movie.id) : showAddIcon(movie.id)
+                    isAddedToWatchlist(movie.id) ? showRemoveIcon(movie) : showAddIcon(movie)
                   }
                 </div>
                 <div className='text-white font-bold text-center w-full bg-gray-900 bg-opacity-60'>
